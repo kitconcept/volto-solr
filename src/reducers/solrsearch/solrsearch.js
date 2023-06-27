@@ -44,6 +44,7 @@ const mapSolrItem = (portal_path, highlighting, item) => {
     created,
     effective,
     image_field,
+    image_scales,
     review_state,
     ...extras
   } = item;
@@ -55,7 +56,8 @@ const mapSolrItem = (portal_path, highlighting, item) => {
     created,
     effective,
     UID, // unused
-    image_field, // missing
+    image_field,
+    image_scales: image_scales ? JSON.parse(image_scales) : null,
     review_state, // missing
     highlighting: getHighlighting(highlighting, UID),
     extras,
