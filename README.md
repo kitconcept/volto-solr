@@ -2,7 +2,7 @@
 
 This add-on enhances Plone (Volto) with a Solr-based full-text search.
 
-This package has to be used together with the `volto-solr` back-end package.
+This package has to be used together with the [`kitconcept.solr`](https://github.com/kitconcept/kitconcept.solr) back-end package.
 
 # Installation
 
