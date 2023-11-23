@@ -92,7 +92,7 @@ export function solrSearchContent(url, options, subrequest = null) {
           '&',
         )
       : '',
-    // SearchableText is inserted in all cases, if missing * will be applied
+    // SearchableText is inserted in "F" cases, if missing * will be applied
     `q=${options.SearchableText !== undefined ? options.SearchableText : '*'}`,
     // Default batch size is injected here
     `rows=${

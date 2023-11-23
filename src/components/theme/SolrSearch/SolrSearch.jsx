@@ -16,6 +16,7 @@ import {
   Pagination,
   Button,
   Dimmer,
+  DimmerDimmable,
   Loader,
   Checkbox,
 } from 'semantic-ui-react';
@@ -32,8 +33,11 @@ import paginationRightSVG from '@plone/volto/icons/right-key.svg';
 import { searchContent } from '@plone/volto/actions';
 import { DefaultResultItem } from './resultItems';
 import { SelectSorting } from './SelectSorting';
+import { SelectLayout } from './SelectLayout';
 import { SearchResultInfo } from './SearchResultInfo';
 import { SearchTabs } from './SearchTabs';
+import { SearchConditions } from './SearchConditions';
+import { queryStateFromParams, queryStateToParams } from './SearchQuery';
 
 const messages = defineMessages({
   TypeSearchWords: {
@@ -111,6 +115,42 @@ const LocalCheckbox = ({ onChange, checked }) => {
   );
 };
 
+// Replace search params **without** changing the route.
+// Reason: as of today react-router will **remount** the component
+// if the route changes, this means we cannot change the query without
+// a full remount. This will cause a blink and then a rerender of the entire
+// component tree. We want to avoid the remount, we don't want a state
+// update because our state is the source of truth.
+const updateLocation = (searchParams, { replace } = {}) => {
+  const url = new URL(location);
+  for (const key in searchParams) {
+    url.searchParams.set(key, searchParams[key]);
+  }
+  history.replaceState({}, '', url);
+  //(replace ? history.replaceState : history.pushState)({}, '', url);
+};
+
+const shallowDiffers = (a, b, { without = [] } = {}) => {
+  for (let i in a)
+    if (!without.includes(i) && !(i in b)) {
+      return true;
+    }
+  for (let i in b)
+    if (!without.includes(i) && a[i] !== b[i]) {
+      return true;
+    }
+  return false;
+};
+
+const shallowCompare = (
+  instance,
+  nextProps,
+  nextState,
+  { props = {}, state = {} } = {},
+) =>
+  shallowDiffers(instance.props, nextProps, props) ||
+  shallowDiffers(instance.state, nextState, state);
+
 /**
  * SolrSearch class.
  * @class SearchComponent
@@ -129,9 +169,6 @@ class SolrSearch extends Component {
     showSearchInput: PropTypes.bool,
     contentTypeSearchResultViews: PropTypes.object,
     contentTypeSearchResultDefaultView: PropTypes.func,
-    searchableText: PropTypes.string,
-    subject: PropTypes.string,
-    path: PropTypes.string,
     items: PropTypes.arrayOf(
       PropTypes.shape({
         '@id': PropTypes.string,
@@ -165,20 +202,15 @@ class SolrSearch extends Component {
     total: 0,
     batching: null,
     searchableText: null,
-    subject: null,
     path: null,
   };
 
   constructor(props) {
     super(props);
     this.state = {
+      ...queryStateFromParams({}),
       currentPage: 1,
       isClient: false,
-      active: 'relevance',
-      searchword: '',
-      groupSelect: 0,
-      allowLocal: false,
-      local: false,
     };
     this.inputRef = createRef();
   }
@@ -189,17 +221,14 @@ class SolrSearch extends Component {
    * @returns {undefined}
    */
   componentDidMount() {
-    this.doSearch();
     const location = this.props.history.location;
-    const qoptions = qs.parse(location.search);
+    const params = qs.parse(location.search);
+
     this.setState({
+      ...this.queryStateFromSearchParams(),
       isClient: true,
-      searchword: this.props.searchableText || '',
-      active: qoptions.sort_on || 'relevance',
-      groupSelect: parseInt(qoptions.group_select) || 0,
-      allowLocal: (qoptions.allow_local || '').toLowerCase() === 'true',
-      local: (qoptions.local || '').toLowerCase() === 'true',
     });
+    this.doSearch(params);
     // put focus to the search input field
     if (this.props.showSearchInput) {
       this.inputRef.current.focus();
@@ -213,117 +242,78 @@ class SolrSearch extends Component {
    * @returns {undefined}
    */
   UNSAFE_componentWillReceiveProps = (nextProps) => {
-    if (this.props.location.search !== nextProps.location.search) {
-      this.doSearch();
+    const search = nextProps.location.search;
+    if (this.props.location.search !== search) {
+      const params = qs.parse(search);
+      this.setState(
+        {
+          ...queryStateFromParams(params),
+          currentPage: 1,
+        },
+        () => this.doSearch(params),
+      );
     }
   };
 
+  searchParams = () => qs.parse(this.props.history.location.search);
+  queryStateFromSearchParams = () => queryStateFromParams(this.searchParams());
+
   /**
-   * Search based on the given searchableText, subject and path.
+   * Search based on the given search params
    * @method doSearch
-   * @param {string} searchableText The searchable text string
-   * @param {string} subject The subject (tag)
-   * @param {string} path The path to restrict the search to
+   * @param {string} params The search params
    * @returns {undefined}
    */
-
-  doSearch = () => {
-    const location = this.props.history.location;
-    const qoptions = qs.parse(location.search);
-    this.setState({ currentPage: 1 });
-    const options = {
-      ...qoptions,
+  doSearch = (params) => {
+    this.props.searchContent('', {
+      ...params,
+      sort_on: params.sort_on != 'relevance' ? params.sort_on : '',
+      b_start: (this.state.currentPage - 1) * config.settings.defaultPageSize,
       path_prefix: getPathPrefix(location),
-      use_site_search_settings: 1,
-      metadata_fields: ['effective', 'UID', 'start'],
-      hl: 'true',
-    };
-    this.props.searchContent('', options);
+    });
+  };
+
+  updateSearch = () => {
+    this.props.history.replace({
+      search: qs.stringify(queryStateToParams(this.state)),
+    });
   };
 
   handleQueryPaginationChange = (e, { activePage }) => {
-    const { settings } = config;
     window.scrollTo(0, 0);
-    const qoptions = qs.parse(this.props.history.location.search);
-    const options = {
-      ...qoptions,
-      use_site_search_settings: 1,
-      metadata_fields: ['effective', 'UID', 'start'],
-      hl: 'true',
-    };
-
-    this.setState({ currentPage: activePage }, () => {
-      this.props.searchContent('', {
-        ...options,
-        b_start: (this.state.currentPage - 1) * settings.defaultPageSize,
-      });
-    });
+    this.setState({ currentPage: activePage }, () => this.updateSearch());
   };
 
-  onSortChange = (selectedOption, sort_order) => {
-    const qoptions = qs.parse(this.props.history.location.search);
-    const options = {
-      ...qoptions,
-      use_site_search_settings: 1,
-      metadata_fields: ['effective', 'UID', 'start'],
-      hl: 'true',
-    };
-    options.sort_on = selectedOption;
-    options.sort_order = sort_order || 'ascending';
-    if (selectedOption === 'relevance') {
-      delete options.sort_on;
-      delete options.sort_order;
-    }
-    let searchParams = qs.stringify(options);
-    this.setState({ currentPage: 1, active: selectedOption }, () => {
-      // eslint-disable-next-line no-restricted-globals
-      this.props.history.replace({
-        search: searchParams,
-      });
-    });
+  onSortChange = (selectedOption, selectedSortOrder) => {
+    this.setState(
+      {
+        currentPage: 1,
+        sortOn: selectedOption,
+        sortOrder: selectedSortOrder || 'ascending',
+      },
+      () => this.updateSearch(),
+    );
   };
 
   setGroupSelect = (groupSelect) => {
-    const qoptions = qs.parse(this.props.history.location.search);
-    const options = {
-      ...qoptions,
-      group_select: groupSelect,
-    };
-    let searchParams = qs.stringify(options);
-    this.setState({ currentPage: 1, groupSelect }, () => {
-      // eslint-disable-next-line no-restricted-globals
-      this.props.history.replace({
-        search: searchParams,
-      });
-    });
+    this.setState({ currentPage: 1, facetConditions: {}, groupSelect }, () =>
+      this.updateSearch(),
+    );
   };
 
   setLocal = (local) => {
-    const qoptions = qs.parse(this.props.history.location.search);
-    const options = {
-      ...qoptions,
-      local: local,
-    };
-    let searchParams = qs.stringify(options);
-    this.setState({ currentPage: 1, local }, () => {
-      // eslint-disable-next-line no-restricted-globals
-      this.props.history.replace({
-        search: searchParams,
-      });
-    });
+    this.setState({ currentPage: 1, local }, () => this.updateSearch());
   };
 
+  setFacetConditions = (facetConditions) => {
+    this.setState({ facetConditions }, () => this.updateSearch());
+  };
+
+  setConditionTree = (f) =>
+    this.setFacetConditions(f(this.state.facetConditions));
+
   onSubmit = (event) => {
-    this.props.history.push({
-      pathname: this.props.pathname,
-      search: qs.stringify({
-        SearchableText: this.state.searchword,
-        active: this.state.active,
-        group_select: this.state.groupSelect,
-        allow_local: this.state.allowLocal || undefined,
-        local: this.state.local,
-      }),
-    });
+    this.updateSearch();
     event.preventDefault();
   };
 
@@ -380,8 +370,15 @@ class SolrSearch extends Component {
             <header>
               {this.props.total > 0 ? (
                 <div className="sorting-bar">
+                  <SelectLayout
+                    layouts={this.props.layouts}
+                    value={this.state.layout}
+                    onChange={(value) => {
+                      this.setState({ layout: value });
+                    }}
+                  />
                   <SelectSorting
-                    value={this.state.active}
+                    value={this.state.sortOn}
                     onChange={(selectedOption, order) => {
                       this.onSortChange(selectedOption, order);
                     }}
@@ -389,48 +386,63 @@ class SolrSearch extends Component {
                 </div>
               ) : null}
             </header>
-            <section id="content-core">
-              <div>
-                <Dimmer active={this.props.loading} inverted>
-                  <Loader indeterminate size="small">
-                    <FormattedMessage id="loading" defaultMessage="Loading" />
-                  </Loader>
-                </Dimmer>
-              </div>
-              {this.props.items?.map((item, index) => (
-                <div key={'' + index + '-' + item['@id']}>
-                  {createElement(resultTypeMapper(item['@type']), {
-                    key: item['@id'],
-                    item,
-                  })}
+            <div className="searchContentWrapper">
+              <SearchConditions
+                groupSelect={this.state.groupSelect}
+                facetFields={this.props.facetFields}
+                conditionTree={this.state.facetConditions}
+                setConditionTree={this.setConditionTree}
+              />
+              <Dimmer active={this.props.loading} inverted>
+                <Loader indeterminate size="small">
+                  <FormattedMessage id="loading" defaultMessage="Loading" />
+                </Loader>
+              </Dimmer>
+              <section
+                id="content-core"
+                className={`layout-${this.state.layout}`}
+              >
+                <div className="search-items">
+                  {this.props.items?.map((item, index) => (
+                    <div key={'' + index + '-' + item['@id']}>
+                      {createElement(resultTypeMapper(item['@type']), {
+                        key: item['@id'],
+                        item,
+                      })}
+                    </div>
+                  ))}
                 </div>
-              ))}
-              {this.props.batching && (
-                <div className="search-footer">
-                  <Pagination
-                    activePage={this.state.currentPage}
-                    totalPages={Math.ceil(
-                      this.props.total / settings.defaultPageSize,
-                    )}
-                    onPageChange={this.handleQueryPaginationChange}
-                    firstItem={null}
-                    lastItem={null}
-                    prevItem={{
-                      content: <Icon name={paginationLeftSVG} size="18px" />,
-                      icon: true,
-                      'aria-disabled': !this.props.batching.prev,
-                      className: !this.props.batching.prev ? 'disabled' : null,
-                    }}
-                    nextItem={{
-                      content: <Icon name={paginationRightSVG} size="18px" />,
-                      icon: true,
-                      'aria-disabled': !this.props.batching.next,
-                      className: !this.props.batching.next ? 'disabled' : null,
-                    }}
-                  />
-                </div>
-              )}
-            </section>
+                {this.props.batching && (
+                  <div className="search-footer">
+                    <Pagination
+                      activePage={this.state.currentPage}
+                      totalPages={Math.ceil(
+                        this.props.total / settings.defaultPageSize,
+                      )}
+                      onPageChange={this.handleQueryPaginationChange}
+                      firstItem={null}
+                      lastItem={null}
+                      prevItem={{
+                        content: <Icon name={paginationLeftSVG} size="18px" />,
+                        icon: true,
+                        'aria-disabled': !this.props.batching.prev,
+                        className: !this.props.batching.prev
+                          ? 'disabled'
+                          : null,
+                      }}
+                      nextItem={{
+                        content: <Icon name={paginationRightSVG} size="18px" />,
+                        icon: true,
+                        'aria-disabled': !this.props.batching.next,
+                        className: !this.props.batching.next
+                          ? 'disabled'
+                          : null,
+                      }}
+                    />
+                  </div>
+                )}
+              </section>
+            </div>
           </article>
         </Container>
         {this.state.isClient && (
@@ -481,7 +493,6 @@ export const __test__ = connect(
       loading,
       batching,
       intl: state.intl,
-      searchableText: qs.parse(props.history.location.search).SearchableText,
       pathname: props.history.location.pathname,
       contentTypeSearchResultViews: contentTypeSearchResultViewsWithDefault(
         props.contentTypeSearchResultViews,
@@ -504,6 +515,8 @@ export default compose(
       const {
         items,
         facetGroups,
+        facetFields,
+        layouts,
         total,
         loaded,
         loading,
@@ -512,12 +525,13 @@ export default compose(
       return {
         items,
         facetGroups,
+        facetFields,
+        layouts,
         total,
         loaded,
         loading,
         batching,
         intl: state.intl,
-        searchableText: qs.parse(props.history.location.search).SearchableText,
         pathname: props.history.location.pathname,
         contentTypeSearchResultViews: contentTypeSearchResultViewsWithDefault(
           props.contentTypeSearchResultViews,

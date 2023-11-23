@@ -29,6 +29,7 @@ const applyConfig = (config) => {
     Event: searchResultItems.EventResultItem,
     Image: searchResultItems.ImageResultItem,
     'News Item': searchResultItems.NewsItemResultItem,
+    Person: searchResultItems.PersonResultItem,
   };
   config.views.contentTypeSearchResultDefaultView =
     searchResultItems.DefaultResultItem;
@@ -64,6 +65,8 @@ const applyConfig = (config) => {
 
   config.addonReducers = { ...config.addonReducers, ...reducers };
   config.addonRoutes = [...config.addonRoutes, ...routes(config)];
+
+  config.settings.baseColor = '#f0f0f0'; // needed as svg cannot use css
 
   return config;
 };
