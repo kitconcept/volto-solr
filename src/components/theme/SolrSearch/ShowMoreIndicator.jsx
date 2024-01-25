@@ -21,7 +21,12 @@ export const ShowMoreIndicator = ({ value, setValue }) => {
   const intl = useIntl();
   const onClick = useCallback((evt) => setValue((v) => !v), [setValue]);
   return (
-    <span className="showMoreIndicator" onClick={onClick}>
+    <span
+      className="showMoreIndicator"
+      onClick={onClick}
+      onKeyDown={() => {}}
+      role="button"
+    >
       {value ? (
         <>
           {intl.formatMessage(messages.showLess)}

@@ -1,10 +1,5 @@
 import { Checkbox } from 'semantic-ui-react';
-import { useState, useCallback, useMemo, useEffect } from 'react';
-
-const spy = (value) => {
-  console.log('RENDER VALUE', value);
-  return value;
-};
+import { useCallback, useMemo } from 'react';
 
 const ValueLabel = ({ value }) => (
   <span className="searchConditionsHasValueLabel">{value}</span>
@@ -23,8 +18,6 @@ export const SearchConditionsValue = ({
   ]);
   const checked = condition[value];
 
-  const fieldDefCmp = JSON.stringify(fieldDef);
-
   return useMemo(
     () =>
       value ? (
@@ -37,7 +30,7 @@ export const SearchConditionsValue = ({
             <div className="searchConditionsCounter" />
           )}
           <div className="searchConditionsLabel">
-            <ValueLabel value={spy(value)} />
+            <ValueLabel value={value} />
           </div>
           <div className="searchConditionsCheckbox">
             <Checkbox

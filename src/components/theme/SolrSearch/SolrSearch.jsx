@@ -16,7 +16,6 @@ import {
   Pagination,
   Button,
   Dimmer,
-  DimmerDimmable,
   Loader,
   Checkbox,
 } from 'semantic-ui-react';
@@ -113,21 +112,6 @@ const LocalCheckbox = ({ onChange, checked }) => {
       />
     </div>
   );
-};
-
-// Replace search params **without** changing the route.
-// Reason: as of today react-router will **remount** the component
-// if the route changes, this means we cannot change the query without
-// a full remount. This will cause a blink and then a rerender of the entire
-// component tree. We want to avoid the remount, we don't want a state
-// update because our state is the source of truth.
-const updateLocation = (searchParams, { replace } = {}) => {
-  const url = new URL(location);
-  for (const key in searchParams) {
-    url.searchParams.set(key, searchParams[key]);
-  }
-  history.replaceState({}, '', url);
-  //(replace ? history.replaceState : history.pushState)({}, '', url);
 };
 
 const shallowDiffers = (a, b, { without = [] } = {}) => {
@@ -269,7 +253,7 @@ class SolrSearch extends Component {
       ...params,
       sort_on: params.sort_on != 'relevance' ? params.sort_on : '',
       b_start: (this.state.currentPage - 1) * config.settings.defaultPageSize,
-      path_prefix: getPathPrefix(location),
+      path_prefix: getPathPrefix(window.location),
     });
   };
 
@@ -553,7 +537,7 @@ export default compose(
         dispatch(
           searchActionWithDefault(searchAction)('', {
             ...qs.parse(location.search),
-            path_prefix: getPathPrefix(location),
+            path_prefix: getPathPrefix(window.location),
             use_site_search_settings: 1,
             metadata_fields: ['effective', 'UID', 'start'],
             hl: 'true',

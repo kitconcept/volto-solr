@@ -6,6 +6,7 @@ describe('SOLR SearchQuery', () => {
       jest.spyOn(console, 'warn').mockImplementation(jest.fn());
     });
     afterEach(() => {
+      // eslint-disable-next-line no-console
       console.warn.mockRestore();
     });
     it('works', () => {

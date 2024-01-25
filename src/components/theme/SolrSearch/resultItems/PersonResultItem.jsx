@@ -1,10 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import ResultItemDate, { thresholdDate } from './helpers/ResultItemDate';
-import ConcatChildren from './helpers/ConcatChildren';
 import ResultItemPreviewImage from './helpers/ResultItemPreviewImage';
-import IconForContentType from './helpers/IconForContentType';
-import locationSVG from '../icons/location.svg';
 import phoneSVG from '../icons/phone.svg';
 import emailSVG from '@plone/volto/icons/email.svg';
 import fallbackAvatarSVG from '../icons/fallback-avatar.svg';

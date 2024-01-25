@@ -18,6 +18,7 @@ describe('SOLR SearchConditions', () => {
       jest.spyOn(console, 'warn').mockImplementation(jest.fn());
     });
     afterEach(() => {
+      // eslint-disable-next-line no-console
       console.warn.mockRestore();
     });
     it('works', () => {
@@ -39,6 +40,7 @@ describe('SOLR SearchConditions', () => {
     });
     it('errors are ignored with {catchError: true}', () => {
       expect(decodeConditionTree('BORKEN', { catchError: true })).toEqual({});
+      // eslint-disable-next-line no-console
       expect(console.warn.mock.calls).toHaveLength(1);
     });
   });

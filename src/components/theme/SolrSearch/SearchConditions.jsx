@@ -1,10 +1,5 @@
 import { SearchConditionsField } from './SearchConditionsField';
-import { useState, useCallback, useEffect, useMemo } from 'react';
-
-const spy = (checked) => {
-  console.log('_ =>', checked);
-  return checked;
-};
+import { useCallback, useMemo } from 'react';
 
 function isEmpty(obj) {
   for (const prop in obj) {
@@ -24,6 +19,7 @@ export const decodeConditionTree = (encoded, { catchError } = {}) => {
       return JSON.parse(atob(encoded));
     } catch (exc) {
       if (catchError) {
+        // eslint-disable-next-line no-console
         console.warn(
           `Ignored broken facet_conditions value [${encoded}] [${exc.message}]`,
         );
@@ -76,7 +72,7 @@ export const SearchConditions = ({
           ...(conditionTree[fieldName] || {}),
           c: {
             ...(conditionTree[fieldName]?.c || {}),
-            [value]: spy(checked),
+            [value]: checked,
           },
         },
       })),

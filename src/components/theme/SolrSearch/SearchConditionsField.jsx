@@ -1,15 +1,9 @@
 import { SearchConditionsValue } from './SearchConditionsValue';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import { ShowMoreIndicator } from './ShowMoreIndicator';
 import { SearchConditionsFieldSearch } from './SearchConditionsFieldSearch';
 
 const empty = {};
-const maxString = String.fromCharCode(255);
-
-const spy = (fieldDef) => {
-  console.log('RENDER FIELD', fieldDef);
-  return fieldDef;
-};
 
 export const SearchConditionsField = ({
   fieldDef,
@@ -68,7 +62,7 @@ export const SearchConditionsField = ({
     () => (
       <div className="searchConditionsField">
         <div className="searchConditionsFieldHeader">
-          {spy(fieldDef.label ?? fieldDef.name)}
+          {fieldDef.label ?? fieldDef.name}
           <SearchConditionsFieldSearch value={prefix} setValue={setPrefix} />
         </div>
         <div className="searchConditionsFieldContent">
@@ -90,10 +84,15 @@ export const SearchConditionsField = ({
     ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       JSON.stringify(fieldDef),
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       JSON.stringify(values),
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       prefix,
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       more,
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       JSON.stringify(condition),
     ],
   );
