@@ -1,6 +1,3 @@
-import { Icon } from '@plone/volto/components';
-import downSVG from './icons/down-key-nofill.svg';
-import upSVG from './icons/up-key-nofill.svg';
 import { useIntl, defineMessages } from 'react-intl';
 
 const messages = defineMessages({

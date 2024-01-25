@@ -37,7 +37,7 @@ export const SelectLayout = ({ onChange, value, layouts }) => {
       // If selected layout is not allowed: select the default
       onChange(supportedLayouts[0]);
     }
-  }, [supportedLayouts, value.onChange]);
+  }, [supportedLayouts, onChange]);
 
   return supportedLayouts.length >= 2 ? (
     <span className="layout-field">
@@ -49,6 +49,7 @@ export const SelectLayout = ({ onChange, value, layouts }) => {
         onClick={() => onChange('list')}
         onKeyDown={() => {}}
         role="button"
+        tabindex="0"
       >
         <Icon name={listBulletSVG} size="18px" />
       </span>
@@ -57,6 +58,7 @@ export const SelectLayout = ({ onChange, value, layouts }) => {
         onClick={() => onChange('grid')}
         onKeyDown={() => {}}
         role="button"
+        tabindex="1"
       >
         <Icon name={gridSVG} size="18px" color="red" />
       </span>

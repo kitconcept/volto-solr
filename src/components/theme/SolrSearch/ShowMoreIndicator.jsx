@@ -26,6 +26,7 @@ export const ShowMoreIndicator = ({ value, setValue }) => {
       onClick={onClick}
       onKeyDown={() => {}}
       role="button"
+      tabindex="0"
     >
       {value ? (
         <>

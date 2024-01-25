@@ -114,27 +114,6 @@ const LocalCheckbox = ({ onChange, checked }) => {
   );
 };
 
-const shallowDiffers = (a, b, { without = [] } = {}) => {
-  for (let i in a)
-    if (!without.includes(i) && !(i in b)) {
-      return true;
-    }
-  for (let i in b)
-    if (!without.includes(i) && a[i] !== b[i]) {
-      return true;
-    }
-  return false;
-};
-
-const shallowCompare = (
-  instance,
-  nextProps,
-  nextState,
-  { props = {}, state = {} } = {},
-) =>
-  shallowDiffers(instance.props, nextProps, props) ||
-  shallowDiffers(instance.state, nextState, state);
-
 /**
  * SolrSearch class.
  * @class SearchComponent
@@ -251,7 +230,7 @@ class SolrSearch extends Component {
   doSearch = (params) => {
     this.props.searchContent('', {
       ...params,
-      sort_on: params.sort_on != 'relevance' ? params.sort_on : '',
+      sort_on: params.sort_on !== 'relevance' ? params.sort_on : '',
       b_start: (this.state.currentPage - 1) * config.settings.defaultPageSize,
       path_prefix: getPathPrefix(window.location),
     });
