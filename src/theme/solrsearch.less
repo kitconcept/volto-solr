@@ -51,8 +51,8 @@
         padding: 0 8px 0 0;
       }
       .layout-selector {
-        vertical-align: text-top;
         padding: 0 6px 0 0;
+        vertical-align: text-top;
         &:not(.active) {
           color: @solr-grey;
           // color: red;
@@ -105,9 +105,9 @@
 
   #content-core {
     display: flex;
-    margin-top: 1.5em;
     flex-direction: column;
     justify-content: space-between;
+    margin-top: 1.5em;
     &.layout-grid .search-items {
       display: grid;
       flex: 0 0 none;
@@ -254,10 +254,10 @@
       margin-top: 2em;
       margin-right: 1.5em;
       .searchConditionsField {
-        border-bottom: 1px;
-        margin-bottom: 2em;
         padding-bottom: 1rem;
+        border-bottom: 1px;
         border-bottom-style: solid;
+        margin-bottom: 2em;
         .searchConditionsFieldHeader {
           font-weight: bold;
           .searchConditionsFieldSearch {
@@ -291,8 +291,8 @@
       .searchConditionsValue {
         display: flex;
         margin-bottom: 0.5em;
-        gap: 0.5em;
         font-size: 13px;
+        gap: 0.5em;
         .searchConditionsLabel {
           overflow: hidden;
           flex: 1 1 auto;
@@ -330,8 +330,8 @@
       display: flex;
 
       .itemImageWrapper {
-        flex: none;
         position: relative;
+        flex: none;
         margin-right: 20px;
 
         img.profileImage {
@@ -351,16 +351,16 @@
 
         .itemField {
           padding-right: 12px;
-          margin-right: 12px;
           border-width: 0 1px 0 0;
           border-style: solid;
+          margin-right: 12px;
+          line-height: 2;
+          white-space: nowrap;
           &:last-child {
             padding-right: 0;
             border-width: 0;
           }
           --overflow-x: hide;
-          line-height: 2;
-          white-space: nowrap;
         }
 
         .itemIcon {
