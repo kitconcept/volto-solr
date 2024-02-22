@@ -371,6 +371,7 @@ class SolrSearch extends Component {
                       {createElement(resultTypeMapper(item['@type']), {
                         key: item['@id'],
                         item,
+                        layout: this.state.layout,
                       })}
                     </div>
                   ))}
