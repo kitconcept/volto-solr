@@ -2,8 +2,11 @@ import { SearchConditionsValue } from './SearchConditionsValue';
 import { useCallback, useMemo } from 'react';
 import { ShowMoreIndicator } from './ShowMoreIndicator';
 import { SearchConditionsFieldSearch } from './SearchConditionsFieldSearch';
+import { useIntl, defineMessages } from 'react-intl';
 
 const empty = {};
+
+const getIntlMessage = (id) => ({ id, defaultMessage: id });
 
 export const SearchConditionsField = ({
   fieldDef,
@@ -13,6 +16,7 @@ export const SearchConditionsField = ({
   setPrefix: setP,
   setMore: setM,
 }) => {
+  const intl = useIntl();
   const { name } = fieldDef;
   const setCondition = useCallback(
     (value, checked) => setC(name, value, checked),
@@ -62,7 +66,7 @@ export const SearchConditionsField = ({
     () => (
       <div className="searchConditionsField">
         <div className="searchConditionsFieldHeader">
-          {fieldDef.label ?? fieldDef.name}
+          {intl.formatMessage(getIntlMessage(fieldDef.label ?? fieldDef.name))}
           <SearchConditionsFieldSearch value={prefix} setValue={setPrefix} />
         </div>
         <div className="searchConditionsFieldContent">
