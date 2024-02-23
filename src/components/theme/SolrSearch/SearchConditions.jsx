@@ -1,5 +1,6 @@
 import { SearchConditionsField } from './SearchConditionsField';
 import { useCallback, useMemo } from 'react';
+import { bToA, aToB } from './base64Helpers';
 
 function isEmpty(obj) {
   for (const prop in obj) {
@@ -11,12 +12,12 @@ function isEmpty(obj) {
 }
 
 export const encodeConditionTree = (conditionTree) =>
-  isEmpty(conditionTree) ? '' : btoa(JSON.stringify(conditionTree));
+  isEmpty(conditionTree) ? '' : bToA(JSON.stringify(conditionTree));
 
 export const decodeConditionTree = (encoded, { catchError } = {}) => {
   if (encoded) {
     try {
-      return JSON.parse(atob(encoded));
+      return JSON.parse(aToB(encoded));
     } catch (exc) {
       if (catchError) {
         // eslint-disable-next-line no-console

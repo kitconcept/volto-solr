@@ -3,6 +3,7 @@ import {
   encodeConditionTree,
   pruneConditionTree,
 } from './SearchConditions';
+import { bToA, aToB } from './base64Helpers';
 
 export const queryStateFromParams = (params) => ({
   searchword: params.SearchableText || '',

@@ -1,5 +1,9 @@
 import { queryStateFromParams, queryStateToParams } from './SearchQuery';
 
+// polyfill needed because of jsDom version used by jest
+import { TextEncoder, TextDecoder } from 'util';
+Object.assign(global, { TextDecoder, TextEncoder });
+
 describe('SOLR SearchQuery', () => {
   describe('queryStateFromParams', () => {
     beforeEach(() => {
@@ -13,7 +17,7 @@ describe('SOLR SearchQuery', () => {
       expect(
         queryStateFromParams({
           allow_local: 'true',
-          facet_conditions: btoa('{"foo":{"m":true}}'),
+          facet_conditions: bToA('{"foo":{"m":true}}'),
           group_select: '2',
           local: 'true',
           SearchableText: 'foobar',
@@ -52,7 +56,7 @@ describe('SOLR SearchQuery', () => {
         }),
       ).toEqual({
         allow_local: 'true',
-        facet_conditions: btoa('{"foo":{"m":true}}'),
+        facet_conditions: bToA('{"foo":{"m":true}}'),
         group_select: '2',
         local: 'true',
         SearchableText: 'foobar',
@@ -90,7 +94,7 @@ describe('SOLR SearchQuery', () => {
         }),
       ).toEqual({
         allow_local: 'true',
-        facet_conditions: btoa('{"foo":{"p":"prefix"}}'),
+        facet_conditions: bToA('{"foo":{"p":"prefix"}}'),
         group_select: '2',
         local: 'true',
         SearchableText: 'foobar',

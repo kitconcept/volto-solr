@@ -3,14 +3,32 @@ import {
   decodeConditionTree,
   pruneConditionTree,
 } from './SearchConditions';
+import { bToA, aToB } from './base64Helpers';
+
+// polyfill needed because of jsDom version used by jest
+import { TextEncoder, TextDecoder } from 'util';
+Object.assign(global, { TextDecoder, TextEncoder });
 
 describe('SOLR SearchConditions', () => {
   describe('encodeConditionTree', () => {
     it('works', () => {
-      expect(encodeConditionTree({ foo: true })).toEqual(btoa('{"foo":true}'));
+      expect(encodeConditionTree({ foo: true })).toEqual(bToA('{"foo":true}'));
     });
     it('empty gives empty string', () => {
       expect(encodeConditionTree({})).toEqual('');
+    });
+    it('utf', () => {
+      // it's important that the binary conversion works with utf,
+      // as standard btoa / atob does not, and would give error
+      // for accented characters when converted back from python.
+      expect(encodeConditionTree({ foo: 'Atommüll' })).toEqual(
+        'eyJmb28iOiJBdG9tbcO8bGwifQ==',
+      );
+    });
+    it('utf and back', () => {
+      expect(encodeConditionTree({ foo: 'Atommüll' })).toEqual(
+        bToA('{"foo":"Atommüll"}'),
+      );
     });
   });
   describe('decodeConditionTree', () => {
@@ -22,7 +40,7 @@ describe('SOLR SearchConditions', () => {
       console.warn.mockRestore();
     });
     it('works', () => {
-      expect(decodeConditionTree(btoa('{"foo":true}'))).toEqual({ foo: true });
+      expect(decodeConditionTree(bToA('{"foo":true}'))).toEqual({ foo: true });
     });
     it('undefined gives empty', () => {
       expect(decodeConditionTree(undefined)).toEqual({});
