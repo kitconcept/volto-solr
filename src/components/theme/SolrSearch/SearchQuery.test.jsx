@@ -1,4 +1,5 @@
 import { queryStateFromParams, queryStateToParams } from './SearchQuery';
+import { aToB, bToA } from './base64helpers';
 
 // polyfill needed because of jsDom version used by jest
 import { TextEncoder, TextDecoder } from 'util';
