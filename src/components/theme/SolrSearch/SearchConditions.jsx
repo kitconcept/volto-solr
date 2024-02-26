@@ -80,13 +80,13 @@ export const SearchConditions = ({
     [setConditionTree],
   );
 
-  const setPrefix = useCallback(
-    (fieldName, prefix) =>
+  const setContains = useCallback(
+    (fieldName, contains) =>
       setConditionTree((conditionTree) => ({
         ...conditionTree,
         [fieldName]: {
           ...(conditionTree[fieldName] || {}),
-          p: prefix,
+          p: contains,
         },
       })),
     [setConditionTree],
@@ -115,7 +115,7 @@ export const SearchConditions = ({
               values={values}
               conditionTree={conditionTree}
               setCondition={setCondition}
-              setPrefix={setPrefix}
+              setContains={setContains}
               setMore={setMore}
             />
           ))}

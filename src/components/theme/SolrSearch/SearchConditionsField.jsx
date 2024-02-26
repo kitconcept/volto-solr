@@ -13,7 +13,7 @@ export const SearchConditionsField = ({
   values: v,
   conditionTree: c,
   setCondition: setC,
-  setPrefix: setP,
+  setContains: setP,
   setMore: setM,
 }) => {
   const intl = useIntl();
@@ -23,8 +23,8 @@ export const SearchConditionsField = ({
     [setC, name],
   );
   const condition = useMemo(() => c[name]?.c || empty, [c, name]);
-  const setPrefix = (prefix) => setP(name, prefix);
-  const prefix = c[name]?.p;
+  const setContains = (contains) => setP(name, contains);
+  const contains = c[name]?.p;
   const setMore = (more) => setM(name, more);
   const more = c[name]?.m;
 
@@ -67,7 +67,10 @@ export const SearchConditionsField = ({
       <div className="searchConditionsField">
         <div className="searchConditionsFieldHeader">
           {intl.formatMessage(getIntlMessage(fieldDef.label ?? fieldDef.name))}
-          <SearchConditionsFieldSearch value={prefix} setValue={setPrefix} />
+          <SearchConditionsFieldSearch
+            value={contains}
+            setValue={setContains}
+          />
         </div>
         <div className="searchConditionsFieldContent">
           {values.map(([value, counter], index) => (
@@ -93,7 +96,7 @@ export const SearchConditionsField = ({
       // eslint-disable-next-line react-hooks/exhaustive-deps
       JSON.stringify(values),
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      prefix,
+      contains,
       // eslint-disable-next-line react-hooks/exhaustive-deps
       more,
       // eslint-disable-next-line react-hooks/exhaustive-deps
