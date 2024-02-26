@@ -51,7 +51,7 @@ services:
       # Use plone.volto rather than kitconcept.volto for the acceptance
       # testing, which makes login in tests "more conventional". - otherwise
       # it's no difference, both could make sense.
-      ADDONS: 'plone.app.robotframework==2.0.0 plone.app.contenttypes plone.restapi plone.volto kitconcept.solr==1.0.0a1'
+      ADDONS: 'plone.app.robotframework==2.0.0 plone.app.contenttypes plone.restapi plone.volto kitconcept.solr@git+https://github.com/kitconcept/kitconcept.solr.git@ree-add-collective-person'
       APPLY_PROFILES: plone.app.contenttypes:plone-content,plone.restapi:default,plone.volto:default-homepage,kitconcept.solr:default,collective.solr:default
       CONFIGURE_PACKAGES: plone.app.contenttypes,plone.restapi,plone.volto,plone.volto.cors,kitconcept.solr,collective.solr
       SOLR_HOST: solr-acceptance
