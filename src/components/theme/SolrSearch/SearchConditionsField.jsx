@@ -2,7 +2,7 @@ import { SearchConditionsValue } from './SearchConditionsValue';
 import { useCallback, useMemo } from 'react';
 import { ShowMoreIndicator } from './ShowMoreIndicator';
 import { SearchConditionsFieldSearch } from './SearchConditionsFieldSearch';
-import { useIntl, defineMessages } from 'react-intl';
+import { useIntl } from 'react-intl';
 
 const empty = {};
 

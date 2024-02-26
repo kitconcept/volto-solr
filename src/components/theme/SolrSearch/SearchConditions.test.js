@@ -3,7 +3,7 @@ import {
   decodeConditionTree,
   pruneConditionTree,
 } from './SearchConditions';
-import { bToA, aToB } from './base64Helpers';
+import { bToA } from './base64Helpers';
 
 // polyfill needed because of jsDom version used by jest
 import { TextEncoder, TextDecoder } from 'util';

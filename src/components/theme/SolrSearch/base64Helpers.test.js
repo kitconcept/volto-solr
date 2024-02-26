@@ -1,4 +1,4 @@
-import { aToB, bToA } from './base64helpers';
+import { aToB, bToA } from './base64Helpers';
 
 // polyfill needed because of jsDom version used by jest
 import { TextEncoder, TextDecoder } from 'util';
