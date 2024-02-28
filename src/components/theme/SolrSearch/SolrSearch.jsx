@@ -376,35 +376,40 @@ class SolrSearch extends Component {
                     </div>
                   ))}
                 </div>
-                {this.props.batching && (
-                  <div className="search-footer">
-                    <Pagination
-                      activePage={this.state.currentPage}
-                      totalPages={Math.ceil(
-                        this.props.total / settings.defaultPageSize,
-                      )}
-                      onPageChange={this.handleQueryPaginationChange}
-                      firstItem={null}
-                      lastItem={null}
-                      prevItem={{
-                        content: <Icon name={paginationLeftSVG} size="18px" />,
-                        icon: true,
-                        'aria-disabled': !this.props.batching.prev,
-                        className: !this.props.batching.prev
-                          ? 'disabled'
-                          : null,
-                      }}
-                      nextItem={{
-                        content: <Icon name={paginationRightSVG} size="18px" />,
-                        icon: true,
-                        'aria-disabled': !this.props.batching.next,
-                        className: !this.props.batching.next
-                          ? 'disabled'
-                          : null,
-                      }}
-                    />
-                  </div>
-                )}
+                {this.props.batching &&
+                  this.props.total / settings.defaultPageSize > 1 && (
+                    <div className="search-footer">
+                      <Pagination
+                        activePage={this.state.currentPage}
+                        totalPages={Math.ceil(
+                          this.props.total / settings.defaultPageSize,
+                        )}
+                        onPageChange={this.handleQueryPaginationChange}
+                        firstItem={null}
+                        lastItem={null}
+                        prevItem={{
+                          content: (
+                            <Icon name={paginationLeftSVG} size="18px" />
+                          ),
+                          icon: true,
+                          'aria-disabled': !this.props.batching.prev,
+                          className: !this.props.batching.prev
+                            ? 'disabled'
+                            : null,
+                        }}
+                        nextItem={{
+                          content: (
+                            <Icon name={paginationRightSVG} size="18px" />
+                          ),
+                          icon: true,
+                          'aria-disabled': !this.props.batching.next,
+                          className: !this.props.batching.next
+                            ? 'disabled'
+                            : null,
+                        }}
+                      />
+                    </div>
+                  )}
               </section>
             </div>
           </article>
