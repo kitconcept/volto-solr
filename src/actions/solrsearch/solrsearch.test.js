@@ -36,7 +36,7 @@ describe('SOLR search action', () => {
         expect(action.subrequest).toEqual('my-subrequest');
       });
 
-      it('if SearchableText is missing but portal_type is specified, q=* will be provided', () => {
+      it('if SearchableText is missing but portal_type is specified, q= will be provided', () => {
         const url = '/blog';
         const portalType = 'Document';
         const action = solrSearchContent(url, { portal_type: portalType });
@@ -44,11 +44,11 @@ describe('SOLR search action', () => {
         expect(action.type).toEqual(SOLR_SEARCH_CONTENT);
         expect(action.request.op).toEqual('get');
         expect(action.request.path).toEqual(
-          `${url}/@solr?portal_type=${portalType}&q=*&rows=25`,
+          `${url}/@solr?portal_type=${portalType}&q=&rows=25`,
         );
       });
 
-      it('if SearchableText is missing but review_state is specified, q=* will be provided', () => {
+      it('if SearchableText is missing but review_state is specified, q= will be provided', () => {
         const url = '/blog';
         const reviewState = 'published';
         const action = solrSearchContent(url, { review_state: reviewState });
@@ -56,7 +56,7 @@ describe('SOLR search action', () => {
         expect(action.type).toEqual(SOLR_SEARCH_CONTENT);
         expect(action.request.op).toEqual('get');
         expect(action.request.path).toEqual(
-          `${url}/@solr?review_state=${reviewState}&q=*&rows=25`,
+          `${url}/@solr?review_state=${reviewState}&q=&rows=25`,
         );
       });
     });
@@ -107,7 +107,7 @@ describe('SOLR search action', () => {
       expect(action.type).toEqual(SOLR_SEARCH_CONTENT);
       expect(action.request.op).toEqual('get');
       expect(action.request.path).toEqual(
-        `${url}/@solr?portal_type:list=Document&portal_type:list=Image&review_state:list=published&review_state:list=private&q=*&rows=25`,
+        `${url}/@solr?portal_type:list=Document&portal_type:list=Image&review_state:list=published&review_state:list=private&q=&rows=25`,
       );
     });
 
@@ -131,7 +131,7 @@ describe('SOLR search action', () => {
       expect(action.subrequest).toEqual('my-subrequest');
       expect(action.request.op).toEqual('get');
       expect(action.request.path).toEqual(
-        `${url}/@solr?portal_type=${portalType}&q=*&rows=25`,
+        `${url}/@solr?portal_type=${portalType}&q=&rows=25`,
       );
     });
 
