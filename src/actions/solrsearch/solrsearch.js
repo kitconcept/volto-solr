@@ -41,10 +41,11 @@ export function solrSearchContent(url, options, subrequest = null) {
     !options['portal_type'] &&
     !options['review_state'];
 
-  if (emptySearchCondition) {
+  if (!options.doEmptySearch && emptySearchCondition) {
     // If none of the conditions are specified, we don't do a server
     // search but return an empty result set in a shortcut.
     // Note that an empty `q` parameter would fail anyway.
+    // This behavior is configurable by the `doEmptySearch` option.
     return resetSolrSearchContent(subrequest);
   }
 

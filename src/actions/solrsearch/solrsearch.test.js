@@ -28,6 +28,14 @@ describe('SOLR search action', () => {
         expect(action.subrequest).toBe(null);
       });
 
+      it('doEmptySearch option', () => {
+        const url = '/blog';
+        const action = solrSearchContent(url, { doEmptySearch: true });
+
+        expect(action.type).toEqual(SOLR_SEARCH_CONTENT);
+        expect(action.subrequest).toBe(null);
+      });
+
       it('if SearchableText, portal_type, review_state are all missing, no request is made and results are cleared, with subrequest', () => {
         const url = '/blog';
         const action = solrSearchContent(url, {}, 'my-subrequest');

@@ -130,6 +130,7 @@ class SolrSearch extends Component {
     searchAction: PropTypes.func,
     getSearchReducer: PropTypes.func,
     showSearchInput: PropTypes.bool,
+    doEmptySearch: PropTypes.bool,
     contentTypeSearchResultViews: PropTypes.object,
     contentTypeSearchResultDefaultView: PropTypes.func,
     items: PropTypes.arrayOf(
@@ -233,6 +234,7 @@ class SolrSearch extends Component {
       sort_on: params.sort_on !== 'relevance' ? params.sort_on : '',
       b_start: (this.state.currentPage - 1) * config.settings.defaultPageSize,
       path_prefix: getPathPrefix(window.location),
+      doEmptySearch: this.props.doEmptySearch,
     });
   };
 
