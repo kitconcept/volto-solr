@@ -260,14 +260,13 @@
       width: 220px;
       flex: 0 0 none;
       margin-top: 2em;
-      margin-right: 1.5em;
+      margin-right: 0.5em;
       .searchConditionsField {
         padding-bottom: 1rem;
-        border-bottom: 1px;
-        border-bottom-style: solid;
         margin-bottom: 2em;
         .searchConditionsFieldHeader {
           font-weight: bold;
+          margin-right: 1em;
           .searchConditionsFieldSearch {
             width: 100%;
             margin-top: 0.5rem;
@@ -281,10 +280,14 @@
         .searchConditionsFieldContent {
           overflow: scroll;
           max-height: 11em;
+          padding-right: 1em;
         }
         .searchConditionsFieldFooter {
           margin-top: 0.5em;
+          margin-right: 1em;
           text-align: right;
+          border-bottom: 1px;
+          border-bottom-style: solid;
           .showMoreIndicator {
             color: @solr-color-interactive-blue;
             font-size: 13px;
