@@ -239,6 +239,7 @@ class SolrSearch extends Component {
   };
 
   updateSearch = () => {
+    this.doSearch(this.searchParams());
     this.props.history.replace({
       search: qs.stringify(queryStateToParams(this.state)),
     });
