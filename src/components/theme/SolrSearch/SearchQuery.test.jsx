@@ -23,6 +23,7 @@ describe('SOLR SearchQuery', () => {
           local: 'true',
           SearchableText: 'foobar',
           sort_on: 'alphabetic',
+          sort_order: 'reverse',
         }),
       ).toEqual({
         allowLocal: true,
@@ -31,6 +32,7 @@ describe('SOLR SearchQuery', () => {
         local: true,
         searchword: 'foobar',
         sortOn: 'alphabetic',
+        sortOrder: 'reverse',
       });
     });
     it('initial', () => {
@@ -41,6 +43,7 @@ describe('SOLR SearchQuery', () => {
         local: false,
         searchword: '',
         sortOn: 'relevance',
+        sortOrder: '',
       });
     });
   });
@@ -54,6 +57,7 @@ describe('SOLR SearchQuery', () => {
           local: true,
           searchword: 'foobar',
           sortOn: 'alphabetic',
+          sortOrder: 'reverse',
         }),
       ).toEqual({
         allow_local: 'true',
@@ -62,6 +66,7 @@ describe('SOLR SearchQuery', () => {
         local: 'true',
         SearchableText: 'foobar',
         sort_on: 'alphabetic',
+        sort_order: 'reverse',
       });
     });
     it('defaults ', () => {
@@ -73,6 +78,7 @@ describe('SOLR SearchQuery', () => {
           local: false,
           searchword: '',
           sortOn: 'relevance',
+          sortOrder: '',
         }),
       ).toEqual({
         allow_local: 'false',
@@ -81,6 +87,7 @@ describe('SOLR SearchQuery', () => {
         local: 'false',
         SearchableText: '',
         sort_on: 'relevance',
+        sort_order: '',
       });
     });
     it('prunes condition tree', () => {
@@ -92,6 +99,7 @@ describe('SOLR SearchQuery', () => {
           local: true,
           searchword: 'foobar',
           sortOn: 'alphabetic',
+          sortOrder: 'reverse',
         }),
       ).toEqual({
         allow_local: 'true',
@@ -100,6 +108,7 @@ describe('SOLR SearchQuery', () => {
         local: 'true',
         SearchableText: 'foobar',
         sort_on: 'alphabetic',
+        sort_order: 'reverse',
       });
     });
   });
