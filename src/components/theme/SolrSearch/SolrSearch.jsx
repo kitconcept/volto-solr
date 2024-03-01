@@ -323,7 +323,7 @@ class SolrSearch extends Component {
             />
           ) : null}
           <SearchResultInfo
-            searchableText={this.props.searchableText}
+            searchableText={this.state.searchword}
             total={this.props.total}
           />
           <SearchTabs
