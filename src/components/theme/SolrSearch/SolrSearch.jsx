@@ -65,19 +65,51 @@ const messages = defineMessages({
   },
 });
 
+const SearchInput = forwardRef(
+  ({ forwardRef, placeholder, className, value, onChange, onSubmit }, ref) => {
+    const SolrSearchAutosuggest = config.widgets.SolrSearchAutosuggest;
+    return (
+      <SolrSearchAutosuggest
+        inputRef={ref}
+        placeholder={placeholder}
+        className={className}
+        value={value || ''}
+        onChange={onChange}
+        onSubmit={onSubmit}
+      />
+    );
+  },
+);
+
+// XXX The original input - left here for testing.
+// const SearchInputDefault = forwardRef(
+//   ({ forwardRef, placeholder, className, value, onChange }, ref) => {
+//     return (
+//       <input
+//         ref={ref}
+//         placeholder={placeholder}
+//         className={className}
+//         value={value}
+//        onChange={onChange}
+//       />
+//     );
+//   },
+// );
+
 // XXX for some reason formatMessage is missing from this.props.intl.
 // Until we figure this out, just acquire it directly from hook.
 // This should not be necessary.. @reebalazs
 const TranslatedInput = forwardRef(
-  ({ forwardRef, placeholder, className, value, onChange }, ref) => {
+  ({ forwardRef, placeholder, className, value, onChange, onSubmit }, ref) => {
     const intl = useIntl();
     return (
-      <input
+      <SearchInput
         ref={ref}
         placeholder={intl.formatMessage(placeholder)}
         className={className}
         value={value}
         onChange={onChange}
+        onSubmit={onSubmit}
       />
     );
   },
@@ -236,6 +268,7 @@ class SolrSearch extends Component {
       path_prefix: getPathPrefix(window.location),
       doEmptySearch: this.props.doEmptySearch,
     });
+    this.setState({ searchwordResult: params.SearchableText });
   };
 
   updateSearch = () => {
@@ -301,19 +334,22 @@ class SolrSearch extends Component {
         <Container>
           {this.props.showSearchInput ? (
             <div className="search-input">
-              <form onSubmit={this.onSubmit}>
-                <TranslatedInput
-                  ref={this.inputRef}
-                  placeholder={messages.TypeSearchWords}
-                  className="searchinput"
-                  value={this.state.searchword}
-                  onChange={(e) =>
-                    this.setState({ searchword: e.target.value })
-                  }
-                />
-                <Button onClick={this.onSubmit}>
-                  <FormattedMessage id="Search" defaultMessage="Search" />{' '}
-                </Button>
+              <form className="ui form" onSubmit={this.onSubmit}>
+                <div className="field searchbox">
+                  <TranslatedInput
+                    ref={this.inputRef}
+                    placeholder={messages.TypeSearchWords}
+                    className="searchinput"
+                    value={this.state.searchword}
+                    onChange={(e) =>
+                      this.setState({ searchword: e.target.value })
+                    }
+                    onSubmit={this.onSubmit}
+                  />
+                  <Button onClick={this.onSubmit}>
+                    <FormattedMessage id="Search" defaultMessage="Search" />{' '}
+                  </Button>
+                </div>
               </form>
             </div>
           ) : null}
@@ -325,7 +361,7 @@ class SolrSearch extends Component {
             />
           ) : null}
           <SearchResultInfo
-            searchableText={this.state.searchword}
+            searchableText={this.state.searchwordResult}
             total={this.props.total}
           />
           <SearchTabs
