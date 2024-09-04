@@ -93,7 +93,7 @@ export function solrSearchContent(url, options, subrequest = null) {
           '&',
         )
       : '',
-    `q=${options.SearchableText ?? ''}`,
+    `q=${encodeURIComponent(options.SearchableText ?? '')}`,
     // Default batch size is injected here
     `rows=${
       options.b_size !== undefined ? options.b_size : settings.defaultPageSize
