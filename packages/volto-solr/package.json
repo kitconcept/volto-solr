@@ -35,7 +35,11 @@
     "release-major-alpha": "release-it major --preRelease=alpha",
     "release-alpha": "release-it --preRelease=alpha"
   },
-  "dependencies": {},
+  "dependencies": {
+    "react-portal": "4.2.1",
+    "lodash.debounce": "^4.0.8",
+    "buffer": "^5.5.0"
+  },
   "peerDependencies": {
     "react": "18.2.0",
     "react-autosuggest": "10.1.0",

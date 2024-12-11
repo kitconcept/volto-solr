@@ -27,11 +27,15 @@ const messages = defineMessages({
   },
 });
 
-export const SelectSorting = injectLazyLibs(['reactSelect'])(
-  ({ onChange, value, reactSelect }) => {
-    const intl = useIntl();
-    const Select = reactSelect.default;
-    const choices = [
+export const SelectSorting = injectLazyLibs(['reactSelect'])(({
+  onChange,
+  value,
+  reactSelect,
+}) => {
+  const intl = useIntl();
+  const Select = reactSelect.default;
+  const choices = useMemo(
+    () => [
       {
         value: 'relevance',
         label: intl.formatMessage(messages.relevance),
@@ -44,44 +48,45 @@ export const SelectSorting = injectLazyLibs(['reactSelect'])(
         value: 'effective',
         label: intl.formatMessage(messages.newestFirst),
       },
-    ];
+    ],
+    [intl],
+  );
 
-    const choicesByValue = useMemo(
-      () =>
-        choices.reduce((d, v) => {
-          d[v.value] = v;
-          return d;
-        }, {}),
-      [choices],
-    );
+  const choicesByValue = useMemo(
+    () =>
+      choices.reduce((d, v) => {
+        d[v.value] = v;
+        return d;
+      }, {}),
+    [choices],
+  );
 
-    return (
-      <span className="sort-field">
-        <span className="sort-by">{intl.formatMessage(messages.sortBy)}</span>
-        <div className="sort-select">
-          <Select
-            id="sort_by"
-            name="sort_by"
-            isSearchable={true}
-            className="react-select-container"
-            classNamePrefix="react-select"
-            isMulti={false}
-            options={choices}
-            styles={customSelectStyles}
-            theme={selectTheme}
-            components={{
-              DropdownIndicator,
-            }}
-            value={choicesByValue[value]}
-            placeholder={intl.formatMessage(messages.select)}
-            onChange={({ value }) =>
-              onChange
-                ? onChange(value, value === 'effective' ? 'reverse' : undefined)
-                : undefined
-            }
-          />
-        </div>
-      </span>
-    );
-  },
-);
+  return (
+    <span className="sort-field">
+      <span className="sort-by">{intl.formatMessage(messages.sortBy)}</span>
+      <div className="sort-select">
+        <Select
+          id="sort_by"
+          name="sort_by"
+          isSearchable={true}
+          className="react-select-container"
+          classNamePrefix="react-select"
+          isMulti={false}
+          options={choices}
+          styles={customSelectStyles}
+          theme={selectTheme}
+          components={{
+            DropdownIndicator,
+          }}
+          value={choicesByValue[value]}
+          placeholder={intl.formatMessage(messages.select)}
+          onChange={({ value }) =>
+            onChange
+              ? onChange(value, value === 'effective' ? 'reverse' : undefined)
+              : undefined
+          }
+        />
+      </div>
+    </span>
+  );
+});

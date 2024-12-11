@@ -9,7 +9,7 @@ const messages = defineMessages({
   },
 });
 
-export default ({ email, className }) => {
+const MailTo = ({ email, className }) => {
   let decoded;
   if (!email.includes('@')) {
     const buffer = Buffer.from(email, 'base64');
@@ -51,3 +51,4 @@ export default ({ email, className }) => {
     </span>
   );
 };
+export default MailTo;

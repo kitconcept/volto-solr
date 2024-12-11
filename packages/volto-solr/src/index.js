@@ -50,16 +50,17 @@ const applyConfig = (config) => {
   config.settings.contentTypeSearchResultDefaultIcon = fileSVG;
 
   // Options for solr search which can be customized
-  config.settings.solrSearchOptions = config.settings.solrSearchDefaultOptions = {
-    searchAction: solrSearchContent,
-    getSearchReducer: (state) => state.solrsearch,
-    copyContentForSolrAction: copyContentForSolr,
-    contentTypeSearchResultViews: config.views.contentTypeSearchResultViews,
-    contentTypeSearchResultDefaultView:
-      config.views.contentTypeSearchResultDefaultView,
-    showSearchInput: true,
-    doEmptySearch: false,
-  };
+  config.settings.solrSearchOptions = config.settings.solrSearchDefaultOptions =
+    {
+      searchAction: solrSearchContent,
+      getSearchReducer: (state) => state.solrsearch,
+      copyContentForSolrAction: copyContentForSolr,
+      contentTypeSearchResultViews: config.views.contentTypeSearchResultViews,
+      contentTypeSearchResultDefaultView:
+        config.views.contentTypeSearchResultDefaultView,
+      showSearchInput: true,
+      doEmptySearch: false,
+    };
 
   // Wrapper for a customized Solr Search component that can be used
   // directly as a route.

@@ -13,10 +13,9 @@ const messages = defineMessages({
 });
 
 const filterSupportedLayouts = (layouts) => {
-  const supportedLayouts = (layouts?.length > 0
-    ? layouts
-    : ['list']
-  ).filter((layout) => ['list', 'grid'].includes(layout));
+  const supportedLayouts = (layouts?.length > 0 ? layouts : ['list']).filter(
+    (layout) => ['list', 'grid'].includes(layout),
+  );
   if (layouts && supportedLayouts.length !== layouts.length) {
     // eslint-disable-next-line no-console
     console.warn(

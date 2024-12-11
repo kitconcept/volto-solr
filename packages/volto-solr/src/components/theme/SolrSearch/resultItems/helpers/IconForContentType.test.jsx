@@ -19,8 +19,10 @@ describe('IconForContentType', () => {
   });
 
   afterEach(() => {
-    config.settings.contentTypeSearchResultIcons = origContentTypeSearchResultIcons;
-    config.settings.contentTypeSearchResultDefaultIcon = origContentTypeSearchResultDefaultIcon;
+    config.settings.contentTypeSearchResultIcons =
+      origContentTypeSearchResultIcons;
+    config.settings.contentTypeSearchResultDefaultIcon =
+      origContentTypeSearchResultDefaultIcon;
   });
 
   test('default icon', () => {
