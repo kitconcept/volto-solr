@@ -77,7 +77,6 @@ const theme = '@kitconcept/volto-solr';
 
 The configuration is provided by default and can be overwritten from any package.
 
-
 ### Result type templates
 
 The search results are rendered by default components, which are customizable.
@@ -127,21 +126,18 @@ The rest of the options provide the baselines for the package and the `Search` c
 
 ## Test installation
 
-Visit http://localhost:3000/ in a browser, login, and check the awesome new features.
-
+Visit <http://localhost:3000/> in a browser, login, and check the awesome new features.
 
 ## Development
 
 The development of this add-on is done in isolation using a new approach using pnpm workspaces and latest `mrs-developer` and other Volto core improvements.
 For this reason, it only works with pnpm and Volto 18 (currently in alpha).
 
-
 ### Pre-requisites
 
--   [Node.js](https://6.docs.plone.org/install/create-project.html#node-js)
--   [Make](https://6.docs.plone.org/install/create-project.html#make)
--   [Docker](https://6.docs.plone.org/install/create-project.html#docker)
-
+- [Node.js](https://6.docs.plone.org/install/create-project.html#node-js)
+- [Make](https://6.docs.plone.org/install/create-project.html#make)
+- [Docker](https://6.docs.plone.org/install/create-project.html#docker)
 
 ### Make convenience commands
 
@@ -166,6 +162,7 @@ storybook-build                  Build Storybook
 acceptance-frontend-dev-start    Start acceptance frontend in development mode
 acceptance-frontend-prod-start   Start acceptance frontend in production mode
 acceptance-backend-start         Start backend acceptance server
+acceptance-backend-stop          Stop backend acceptance server
 ci-acceptance-backend-start      Start backend acceptance server in headless mode for CI
 acceptance-test                  Start Cypress in interactive mode
 ci-acceptance-test               Run cypress tests in headless mode for CI
@@ -245,6 +242,12 @@ In the third session, start the Cypress interactive test runner.
 
 ```shell
 make acceptance-test
+```
+
+There is also a stop command for the backend acceptance server.
+
+```shell
+make acceptance-backend-stop
 ```
 
 ## License

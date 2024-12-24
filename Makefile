@@ -23,10 +23,18 @@ GIT_FOLDER=$(CURRENT_DIR)/.git
 PRE_COMMIT=pipx run --spec 'pre-commit==3.7.1' pre-commit
 
 PLONE_VERSION=6
+VOLTO_VERSION=18.2.3
 DOCKER_IMAGE=plone/server-dev:${PLONE_VERSION}
 DOCKER_IMAGE_ACCEPTANCE=plone/server-acceptance:${PLONE_VERSION}
 
 ADDON_NAME='@kitconcept/volto-solr'
+ADDON_PATH='volto-solr'
+# DEV_COMPOSE=dockerfiles/docker-compose.yml
+ACCEPTANCE_COMPOSE=acceptance/docker-compose.yml
+SOLR_CONTEXT_FOLDER=${CURRENT_DIR}/acceptance/solr
+CMD=CURRENT_DIR=${CURRENT_DIR} ADDON_NAME=${ADDON_NAME} ADDON_PATH=${ADDON_PATH} VOLTO_VERSION=${VOLTO_VERSION} PLONE_VERSION=${PLONE_VERSION} SOLR_CONTEXT_FOLDER=${SOLR_CONTEXT_FOLDER} docker compose
+# DOCKER_COMPOSE=${CMD} -p ${ADDON_PATH} -f ${DEV_COMPOSE}
+ACCEPTANCE=${CMD} -p ${ADDON_PATH}-acceptance -f ${ACCEPTANCE_COMPOSE}
 
 .PHONY: help
 help: ## Show this help
@@ -50,10 +58,10 @@ start: ## Starts Volto, allowing reloading of the add-on during development
 build: ## Build a production bundle for distribution of the project with the add-on
 	pnpm build
 
-core/packages/registry/dist: core/packages/registry/src
+core/packages/registry/dist: $(shell find core/packages/registry/src -type f)
 	pnpm --filter @plone/registry build
 
-core/packages/components/dist: core/packages/components/src
+core/packages/components/dist: $(shell find core/packages/components/src -type f)
 	pnpm --filter @plone/components build
 
 .PHONY: build-deps
@@ -91,7 +99,7 @@ release-dry-run: ## Dry-run the release of the add-on on npmjs.org
 test: ## Run unit tests
 	pnpm test
 
-.PHONY: test-ci
+.PHONY: ci-test
 ci-test: ## Run unit tests in CI
 	# Unit Tests need the i18n to be built
 	VOLTOCONFIG=$(pwd)/volto.config.js pnpm --filter @plone/volto i18n
@@ -115,26 +123,40 @@ storybook-build: ## Build Storybook
 	pnpm run storybook-build -o $(CURRENT_DIR)/.storybook-build
 
 ## Acceptance
+.PHONY: acceptance-install
+acceptance-install: ## Install Cypress, build containers
+	# (cd acceptance && pnpm install)
+	# ${ACCEPTANCE} --profile dev --profile prod build
+	${ACCEPTANCE} --profile dev --profile prod build
+
 .PHONY: acceptance-frontend-dev-start
 acceptance-frontend-dev-start: ## Start acceptance frontend in development mode
-	RAZZLE_API_PATH=http://127.0.0.1:55001/plone pnpm start
+    # Note the error is that :3001 gives an empty response from a cypress browser.
+	# Also see https://github.com/cypress-io/cypress/issues/27962
+	RAZZLE_API_PATH=http://127.0.0.1:55001/plone NODE_OPTIONS=--dns-result-order=ipv4first pnpm start
 
 .PHONY: acceptance-frontend-prod-start
 acceptance-frontend-prod-start: ## Start acceptance frontend in production mode
-	RAZZLE_API_PATH=http://127.0.0.1:55001/plone pnpm build && pnpm start:prod
+# Note the error is that :3001 gives an empty response from a cypress browser.
+	# Also see https://github.com/cypress-io/cypress/issues/27962
+	RAZZLE_API_PATH=http://127.0.0.1:55001/plone NODE_OPTIONS=--dns-result-order=ipv4first pnpm build && pnpm start:prod
 
 .PHONY: acceptance-backend-start
 acceptance-backend-start: ## Start backend acceptance server
-	docker run -it --rm -p 55001:55001 $(DOCKER_IMAGE_ACCEPTANCE)
+	${ACCEPTANCE} up -d
+
+.PHONY: acceptance-backend-stop
+acceptance-backend-stop: ## Stop backend acceptance server
+	${ACCEPTANCE} down
 
 .PHONY: ci-acceptance-backend-start
 ci-acceptance-backend-start: ## Start backend acceptance server in headless mode for CI
-	docker run -i --rm -p 55001:55001 $(DOCKER_IMAGE_ACCEPTANCE)
+	${ACCEPTANCE} up -d
 
 .PHONY: acceptance-test
 acceptance-test: ## Start Cypress in interactive mode
-	pnpm --filter @plone/volto exec cypress open --config-file $(CURRENT_DIR)/cypress.config.js --config specPattern=$(CURRENT_DIR)'/cypress/tests/**/*.{js,jsx,ts,tsx}'
+	pnpm --filter @plone/volto exec cypress open --config-file $(CURRENT_DIR)/acceptance/cypress.config.js --config specPattern=$(CURRENT_DIR)'/acceptance/cypress/tests/**/*.{js,jsx,ts,tsx}'
 
 .PHONY: ci-acceptance-test
 ci-acceptance-test: ## Run cypress tests in headless mode for CI
-	pnpm --filter @plone/volto exec cypress run --config-file $(CURRENT_DIR)/cypress.config.js --config specPattern=$(CURRENT_DIR)'/cypress/tests/**/*.{js,jsx,ts,tsx}'
+	pnpm --filter @plone/volto exec cypress run --config-file $(CURRENT_DIR)/acceptance/cypress.config.js --config specPattern=$(CURRENT_DIR)'/acceptance/cypress/tests/**/*.{js,jsx,ts,tsx}'

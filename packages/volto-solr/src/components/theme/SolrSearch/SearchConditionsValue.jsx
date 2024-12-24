@@ -9,8 +9,8 @@ const formattedCounter = (value) =>
   value < 1000
     ? `${value}`
     : value < 100000
-    ? `${Math.floor(value / 1000)}K`
-    : '99K';
+      ? `${Math.floor(value / 1000)}K`
+      : '99K';
 
 export const SearchConditionsValue = ({
   fieldDef,
@@ -19,10 +19,10 @@ export const SearchConditionsValue = ({
   condition,
   setCondition: setC,
 }) => {
-  const setCondition = useCallback((checked) => setC(value, checked), [
-    setC,
-    value,
-  ]);
+  const setCondition = useCallback(
+    (checked) => setC(value, checked),
+    [setC, value],
+  );
   const checked = condition[value];
 
   return useMemo(

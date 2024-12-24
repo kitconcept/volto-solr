@@ -199,7 +199,8 @@ describe('ResultItemPreviewImage', () => {
     });
     afterEach(() => {
       config.getComponent({ name: 'Image' }).component = origComponent;
-      config.settings.contentTypeSearchResultAlwaysUseLegacyImage = origContentTypeSearchResultAlwaysUseLegacyImage;
+      config.settings.contentTypeSearchResultAlwaysUseLegacyImage =
+        origContentTypeSearchResultAlwaysUseLegacyImage;
     });
 
     test('if image component not available on Volto 16', () => {

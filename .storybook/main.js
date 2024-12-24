@@ -107,9 +107,9 @@ module.exports = {
       [],
       defaultRazzleOptions,
     );
-    const AddonConfigurationRegistry = require('@plone/registry/src/addon-registry');
+    const { AddonRegistry } = require('@plone/registry/addon-registry');
 
-    const registry = new AddonConfigurationRegistry(projectRootPath);
+    const { registry } = AddonRegistry.init(projectRootPath);
 
     config = lessPlugin({ registry }).modifyWebpackConfig({
       env: { target: 'web', dev: 'dev' },
@@ -146,7 +146,7 @@ module.exports = {
       resolve: {
         ...config.resolve,
         alias: { ...config.resolve.alias, ...baseConfig.resolve.alias },
-        fallback: { ...config.resolve.fallback, zlib: false },
+        fallback: { ...config.resolve.fallback, zlib: false, buffer: false },
       },
     };
 

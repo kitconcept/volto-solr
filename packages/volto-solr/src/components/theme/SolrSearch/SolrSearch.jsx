@@ -488,13 +488,8 @@ const contentTypeSearchResultDefaultViewWithDefault = (
 
 export const __test__ = connect(
   (state, props) => {
-    const {
-      items,
-      total,
-      loaded,
-      loading,
-      batching,
-    } = getSearchReducerWithDefault(state, props);
+    const { items, total, loaded, loading, batching } =
+      getSearchReducerWithDefault(state, props);
     return {
       items,
       total,
@@ -506,9 +501,10 @@ export const __test__ = connect(
       contentTypeSearchResultViews: contentTypeSearchResultViewsWithDefault(
         props.contentTypeSearchResultViews,
       ),
-      contentTypeSearchResultDefaultView: contentTypeSearchResultDefaultViewWithDefault(
-        props.contentTypeSearchResultDefaultView,
-      ),
+      contentTypeSearchResultDefaultView:
+        contentTypeSearchResultDefaultViewWithDefault(
+          props.contentTypeSearchResultDefaultView,
+        ),
     };
   },
   (dispatch, { searchAction }) => ({
@@ -545,9 +541,10 @@ export default compose(
         contentTypeSearchResultViews: contentTypeSearchResultViewsWithDefault(
           props.contentTypeSearchResultViews,
         ),
-        contentTypeSearchResultDefaultView: contentTypeSearchResultDefaultViewWithDefault(
-          props.contentTypeSearchResultDefaultView,
-        ),
+        contentTypeSearchResultDefaultView:
+          contentTypeSearchResultDefaultViewWithDefault(
+            props.contentTypeSearchResultDefaultView,
+          ),
       };
     },
     (dispatch, { searchAction }) => ({
