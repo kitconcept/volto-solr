@@ -53,11 +53,14 @@ const ID_ALL = '@ALL';
 // always be fetched currently.
 const NR_ITEMS = 8;
 
+const emptyArray = [];
+
 const SolrSearchAutosuggestRaw = (props) => {
   const originalText = props.value;
   const dispatch = useDispatch();
-  let suggestions = useSelector((state) =>
-    state.solrSearchSuggestions.items.slice(0, NR_ITEMS),
+  let suggestions = useSelector(
+    (state) =>
+      state.solrSearchSuggestions?.items?.slice(0, NR_ITEMS) || emptyArray,
   ).concat({
     '@type': 'ShowAll',
     '@id': ID_ALL,

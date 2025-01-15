@@ -23,7 +23,7 @@ GIT_FOLDER=$(CURRENT_DIR)/.git
 PRE_COMMIT=pipx run --spec 'pre-commit==3.7.1' pre-commit
 
 PLONE_VERSION=6
-VOLTO_VERSION=18.2.3
+VOLTO_VERSION=18.9.1
 DOCKER_IMAGE=plone/server-dev:${PLONE_VERSION}
 DOCKER_IMAGE_ACCEPTANCE=plone/server-acceptance:${PLONE_VERSION}
 
@@ -133,13 +133,13 @@ acceptance-install: ## Install Cypress, build containers
 acceptance-frontend-dev-start: ## Start acceptance frontend in development mode
     # Note the error is that :3001 gives an empty response from a cypress browser.
 	# Also see https://github.com/cypress-io/cypress/issues/27962
-	RAZZLE_API_PATH=http://127.0.0.1:55001/plone NODE_OPTIONS=--dns-result-order=ipv4first pnpm start
+	RAZZLE_API_PATH=http://localhost:55001/plone NODE_OPTIONS=--dns-result-order=ipv4first pnpm start
 
 .PHONY: acceptance-frontend-prod-start
 acceptance-frontend-prod-start: ## Start acceptance frontend in production mode
-# Note the error is that :3001 gives an empty response from a cypress browser.
+    # Note the error is that :3001 gives an empty response from a cypress browser.
 	# Also see https://github.com/cypress-io/cypress/issues/27962
-	RAZZLE_API_PATH=http://127.0.0.1:55001/plone NODE_OPTIONS=--dns-result-order=ipv4first pnpm build && pnpm start:prod
+	RAZZLE_API_PATH=http://localhost:55001/plone NODE_OPTIONS=--dns-result-order=ipv4first pnpm build && pnpm start:prod
 
 .PHONY: acceptance-backend-start
 acceptance-backend-start: ## Start backend acceptance server
