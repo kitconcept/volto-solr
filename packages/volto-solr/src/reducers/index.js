@@ -1,5 +1,5 @@
 import solrsearch from './solrsearch/solrsearch';
-import solrSearchSuggestions from './solrsearch/solrSearchSuggestions';
+import solrsearchsuggestions from './solrsearch/solrSearchSuggestions';
 import { defineMessages } from 'react-intl';
 
 // needed to add as overrides are not parsed by i18n
@@ -35,7 +35,7 @@ defineMessages({
 
 const reducers = {
   solrsearch,
-  solrSearchSuggestions,
+  solrsearchsuggestions,
 };
 
 export default reducers;

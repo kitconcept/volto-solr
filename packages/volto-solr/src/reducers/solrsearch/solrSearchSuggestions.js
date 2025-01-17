@@ -13,7 +13,10 @@ const initialState = {
   subrequests: {},
 };
 
-export default function searchSuggestions(state = initialState, action = {}) {
+export default function solrSearchSuggestions(
+  state = initialState,
+  action = {},
+) {
   switch (action.type) {
     case `${SOLR_SEARCH_SUGGESTIONS}_PENDING`:
       return {
