@@ -34,10 +34,7 @@ const solrPathToPortalPath = (portal_path, path) => {
   return path;
 };
 
-const getHighlighting = (highlighting, UID) =>
-  [].concat(...(Object.values(highlighting[UID]) || {}));
-
-const mapSolrItem = (portal_path, highlighting, item) => {
+const mapSolrItem = (portal_path, item) => {
   const {
     path_string,
     Type,
@@ -60,7 +57,6 @@ const mapSolrItem = (portal_path, highlighting, item) => {
     UID, // unused
     image_field, // missing
     review_state, // missing
-    highlighting: getHighlighting(highlighting, UID),
     extras,
   };
 };
@@ -128,11 +124,7 @@ export default function search(state = initialState, action = {}) {
         error: null,
         items: map(
           action.result.response.docs,
-          mapSolrItem.bind(
-            null,
-            action.result.portal_path,
-            action.result.highlighting,
-          ),
+          mapSolrItem.bind(null, action.result.portal_path),
         ),
         total: action.result.response.numFound,
         facetGroups: action.result.facet_groups || [],
