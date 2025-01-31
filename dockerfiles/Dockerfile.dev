@@ -2,6 +2,11 @@
 ARG VOLTO_VERSION
 FROM plone/frontend-dev:${VOLTO_VERSION}
 
+LABEL maintainer="kitconcept, GmbH <info@kitconcept.com>" \
+    org.label-schema.name="volto-solr" \
+    org.label-schema.description="Solr front-end support for Volto" \
+    org.label-schema.vendor="kitconcept, GmbH"
+
 ARG ADDON_NAME
 ARG ADDON_PATH
 
@@ -9,5 +14,5 @@ COPY --chown=node:node package.json /app/src/addons/${ADDON_PATH}/
 
 RUN <<EOT
     /setupAddon
-    yarn install --network-timeout 1000000
+    pnpm install --network-timeout 1000000
 EOT

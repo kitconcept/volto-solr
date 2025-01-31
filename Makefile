@@ -24,16 +24,16 @@ PRE_COMMIT=pipx run --spec 'pre-commit==3.7.1' pre-commit
 
 PLONE_VERSION=6
 VOLTO_VERSION=18.2.3
-DOCKER_IMAGE=plone/server-dev:${PLONE_VERSION}
-DOCKER_IMAGE_ACCEPTANCE=plone/server-acceptance:${PLONE_VERSION}
+# DOCKER_IMAGE=plone/server-dev:${PLONE_VERSION}
+# DOCKER_IMAGE_ACCEPTANCE=plone/server-acceptance:${PLONE_VERSION}
 
 ADDON_NAME='@kitconcept/volto-solr'
 ADDON_PATH='volto-solr'
-# DEV_COMPOSE=dockerfiles/docker-compose.yml
+DEV_COMPOSE=dockerfiles/docker-compose.yml
 ACCEPTANCE_COMPOSE=acceptance/docker-compose.yml
 SOLR_CONTEXT_FOLDER=${CURRENT_DIR}/acceptance/solr
 CMD=CURRENT_DIR=${CURRENT_DIR} ADDON_NAME=${ADDON_NAME} ADDON_PATH=${ADDON_PATH} VOLTO_VERSION=${VOLTO_VERSION} PLONE_VERSION=${PLONE_VERSION} SOLR_CONTEXT_FOLDER=${SOLR_CONTEXT_FOLDER} docker compose
-# DOCKER_COMPOSE=${CMD} -p ${ADDON_PATH} -f ${DEV_COMPOSE}
+DOCKER_COMPOSE=${CMD} -p ${ADDON_PATH} -f ${DEV_COMPOSE}
 ACCEPTANCE=${CMD} -p ${ADDON_PATH}-acceptance -f ${ACCEPTANCE_COMPOSE}
 
 .PHONY: help
@@ -105,10 +105,20 @@ ci-test: ## Run unit tests in CI
 	VOLTOCONFIG=$(pwd)/volto.config.js pnpm --filter @plone/volto i18n
 	CI=1 RAZZLE_JEST_CONFIG=$(CURRENT_DIR)/jest-addon.config.js pnpm --filter @plone/volto test -- --passWithNoTests
 
+# Docker Helpers
+
+.PHONY: backend-docker-install
+backend-docker-install: ## Build docker containers for the backend
+	${DOCKER_COMPOSE} build
+
 .PHONY: backend-docker-start
-backend-docker-start:	## Starts a Docker-based backend for development
-	@echo "$(GREEN)==> Start Docker-based Plone Backend$(RESET)"
-	docker run -it --rm --name=backend -p 8080:8080 -e SITE=Plone $(DOCKER_IMAGE)
+backend-docker-start: ## Start backend development server
+	@echo "$(GREEN)==> Start Docker-based Plone Backend and Solr$(RESET)"
+	${DOCKER_COMPOSE} up -d
+
+.PHONY: backend-docker-stop
+backend-docker-stop: ## Stop backend development server
+	${DOCKER_COMPOSE} down
 
 ## Storybook
 .PHONY: storybook-start
