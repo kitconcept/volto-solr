@@ -9,16 +9,18 @@ COPY --chown=node:node ./ /app/src/addons/${ADDON_PATH}/
 
 RUN <<EOT
     /setupAddon
-    yarn install --network-timeout 1000000
-    yarn build
-    rm -rf cache omelette .yarn/cache
+    npm install -g corepack@latest
+    corepack enable
+    pnpm install --fetch-timeout 1000000
+    pnpm build
+    rm -rf cache omelette `pnpm store path --silent`
 EOT
 
 FROM plone/frontend-prod-config:${VOLTO_VERSION}
 
 LABEL maintainer="Plone Community <dev@plone.org>" \
-      org.label-schema.name="volto-solr" \
-      org.label-schema.description="Solr front-end support for Volto" \
-      org.label-schema.vendor="Plone Foundation"
+    org.label-schema.name="volto-solr" \
+    org.label-schema.description="Solr front-end support for Volto" \
+    org.label-schema.vendor="Plone Foundation"
 
 COPY --from=builder /app/ /app/

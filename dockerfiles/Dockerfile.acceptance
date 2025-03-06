@@ -9,5 +9,8 @@ COPY --chown=node:node package.json /app/src/addons/${ADDON_PATH}/
 
 RUN <<EOT
     /setupAddon
-    yarn install --network-timeout 1000000
+    npm install -g corepack@latest
+    corepack enable
+    pnpm install --fetch-timeout 1000000
+    pnpm build
 EOT

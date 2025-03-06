@@ -15,3 +15,157 @@ msgstr ""
 "Language-Name: Português do Brasil\n"
 "Preferred-Encodings: utf-8\n"
 "Domain: volto\n"
+
+#. Default: "All"
+#: components/theme/SolrSearch/solr-facets-i18n
+msgid "All"
+msgstr ""
+
+#. Default: "Alphabetically"
+#: components/theme/SolrSearch/SelectSorting
+#: reducers/index
+msgid "Alphabetically"
+msgstr ""
+
+#. Default: "Date (newest first)"
+#: components/theme/SolrSearch/SelectSorting
+#: reducers/index
+msgid "Date (newest first)"
+msgstr ""
+
+#. Default: "Events"
+#: components/theme/SolrSearch/solr-facets-i18n
+msgid "Events"
+msgstr ""
+
+#. Default: "Files"
+#: components/theme/SolrSearch/solr-facets-i18n
+msgid "Files"
+msgstr ""
+
+#. Default: "Images"
+#: components/theme/SolrSearch/solr-facets-i18n
+msgid "Images"
+msgstr ""
+
+#. Default: "Job offers"
+#: components/theme/SolrSearch/solr-facets-i18n
+msgid "Job offers"
+msgstr ""
+
+#. Default: "Layout:"
+#: components/theme/SolrSearch/SelectLayout
+msgid "Layout:"
+msgstr ""
+
+#. Default: "Open a Mailto Link to the Members Email Address"
+#: components/theme/SolrSearchWidget/MailTo
+msgid "Open a Mailto Link to the Members Email Address"
+msgstr ""
+
+#. Default: "Pages"
+#: components/theme/SolrSearch/solr-facets-i18n
+msgid "Pages"
+msgstr ""
+
+#. Default: "People"
+#: components/theme/SolrSearch/solr-facets-i18n
+msgid "People"
+msgstr ""
+
+#. Default: "Relevance"
+#: components/theme/SolrSearch/SelectSorting
+#: reducers/index
+msgid "Relevance"
+msgstr ""
+
+#. Default: "Reports"
+#: components/theme/SolrSearch/solr-facets-i18n
+msgid "Reports"
+msgstr ""
+
+#. Default: "Search"
+#: components/theme/SolrSearch/SolrSearch
+#: components/theme/SolrSearchWidget/SolrSearchWidget
+msgid "Search"
+msgstr ""
+
+#. Default: "Search Site"
+#: components/theme/SolrSearchWidget/SolrSearchWidget
+msgid "Search Site"
+msgstr ""
+
+#. Default: "Search..."
+#: components/theme/SolrSearch/SearchConditionsFieldSearch
+#: components/theme/SolrSearch/SolrSearch
+msgid "Search..."
+msgstr ""
+
+#. Default: "Select…"
+#: components/theme/SolrSearch/SelectSorting
+#: reducers/index
+msgid "Select…"
+msgstr ""
+
+#. Default: "Show all search results..."
+#: components/theme/SolrSearchWidget/SolrSearchWidget
+msgid "Show all search results..."
+msgstr ""
+
+#. Default: "Show less"
+#: components/theme/SolrSearch/ShowMoreIndicator
+msgid "Show less"
+msgstr ""
+
+#. Default: "Show more"
+#: components/theme/SolrSearch/ShowMoreIndicator
+msgid "Show more"
+msgstr ""
+
+#. Default: "Sort by:"
+#: components/theme/SolrSearch/SelectSorting
+#: reducers/index
+msgid "Sort By:"
+msgstr ""
+
+#. Default: "Loading"
+#: components/theme/SolrSearch/SolrSearch
+msgid "loading"
+msgstr ""
+
+#. Default: "not published yet"
+#: components/theme/SolrSearch/resultItems/helpers/ResultItemDate
+msgid "not published yet"
+msgstr ""
+
+#. Default: "results"
+#: components/theme/SolrSearch/SolrSearch
+msgid "results"
+msgstr ""
+
+#. Default: "All content (global)"
+#: components/theme/SolrSearch/SolrSearch
+msgid "searchGlobalized"
+msgstr ""
+
+#. Default: "This subfolder only"
+#: components/theme/SolrSearch/SolrSearch
+msgid "searchLocalized"
+msgstr ""
+
+#. Default: "Show results for:"
+#: components/theme/SolrSearch/SolrSearch
+msgid "searchLocalizedLabel"
+msgstr ""
+
+#. Default: "{total, plural, =0 {No results} =1 {# result} other {# results}}"
+#: components/theme/SolrSearch/SearchResultInfo
+#: reducers/index
+msgid "{total, plural, =0 {No results} =1 {# result} other {# results}}"
+msgstr ""
+
+#. Default: "{total, plural, =0 {No results} =1 {# result} other {# results}} for"
+#: components/theme/SolrSearch/SearchResultInfo
+#: reducers/index
+msgid "{total, plural, =0 {No results} =1 {# result} other {# results}} for"
+msgstr ""
