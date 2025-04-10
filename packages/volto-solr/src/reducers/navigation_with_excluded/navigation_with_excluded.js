@@ -67,8 +67,16 @@ export default function navigation_with_excluded(
           loaded: true,
           loading: false,
         };
+      } else {
+        // It's a route change, so we nullify the state
+        return {
+          ...state,
+          error: null,
+          items: [],
+          loaded: false,
+          loading: false,
+        };
       }
-      return state;
     case `${GET_NAVIGATION_WITH_EXCLUDED}_SUCCESS`:
       // Even if the expander is set or not, if the GET_NAVIGATION_WITH_EXCLUDED is
       // called, we want it to store the data if the actions data is
