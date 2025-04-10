@@ -176,6 +176,42 @@ describe('Navigation reducer (NAVIGATION_WITH_EXJUDED)GET_CONTENT', () => {
     });
   });
 
+  it('should handle (NAVIGATION_WITH_EXCLUDED)GET_CONTENT_SUCCESS reset state if no expander info', () => {
+    config.settings.apiExpanders = [
+      {
+        match: '',
+        GET_CONTENT: [],
+      },
+    ];
+    const state = {
+      error: null,
+      items: [
+        {
+          '@id': 'http://localhost:8080/Plone/front-page',
+          title: 'Welcome to Plone!',
+          description:
+            'Congratulations! You have successfully installed Plone.',
+          url: '/front-page',
+        },
+      ],
+      loaded: true,
+      loading: false,
+    };
+    expect(
+      navigation_with_excluded(state, {
+        type: `${GET_CONTENT}_SUCCESS`,
+        result: {
+          '@components': {},
+        },
+      }),
+    ).toEqual({
+      error: null,
+      items: [],
+      loaded: false,
+      loading: false,
+    });
+  });
+
   it('should handle (NAVIGATION_WITH_EXCLUDED)GET_NAVIGATION_WITH_EXCLUDED_SUCCESS (standalone with apiExpander enabled)', () => {
     expect(
       navigation_with_excluded(undefined, {
