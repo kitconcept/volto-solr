@@ -64,4 +64,12 @@ All supported content type templates respect these settings, so an icon for a co
 
 The rest of the options provide the baselines for the package and the `Search` compoment to work. You can override various components via these options, including the `Search` component and the underlying reducers and actions that it uses. There is currently no supported use case for this, so please refer to the source code if you wish to do this. You most likely won't need to do this.
 
+## Credits
 
+<img alt="Deutsches Zentrum für Luft- und Raumfahrt" src="https://github.com/kitconcept/volto-slider-block/raw/main/dlr.svg" width="230px" />
+
+<img alt="Forschungszentrum Jülich" src="https://github.com/kitconcept/volto-slider-block/raw/main/fz-juelich.svg" width="200px" />
+
+<img alt="Fachhochschule Nordwestschweiz" src="https://www.fhnw.ch/logo/fhnw-logo-de.svg" width="200px">
+
+The development of this plugin has been kindly sponsored by [Fachhochschule Nordwestschweiz (FHNW)](https://www.fhnw.ch/de), [Forschungszentrum Jülich](https://fz-juelich.de), and the [German Aerospace Center (DLR)](https://dlr.de).
